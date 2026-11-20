@@ -1,37 +1,32 @@
-"""A tkinter joke assitant taht reads jokes from the supplied text file."""
+"""A tkinter joke assistant that reads jokes from the supplied text file."""
 
-import random 
+import random
 import tkinter as tk
 from pathlib import Path
-from tkinter import messagebox, ttk
+from tkinter import messagebox
 
 
-def load__jokes(filepath):
-    """Reads the joke lines and return each valid setup and punchline as a pair."""
+def load_jokes(filepath):
+    """Read valid joke setup and punchline pairs from a text file."""
     jokes = []
 
-
     try:
-        with file_path.open("r", encoding+"utf-8") as joke_file:
+        with filepath.open("r", encoding="utf-8") as joke_file:
             for line in joke_file:
-                line - line.strip()
+                line = line.strip()
 
                 if "?" in line:
                     setup, punchline = line.split("?", 1)
-                    setup = setup.strip()
+                    setup = setup.strip() + "?"
                     punchline = punchline.strip()
 
-                    if setup and punchline:
-                        jokes.append((f"{setup}?"))
-
-
-                        if setup and punchline.strip()
-                            jokes.append((setup + "?", punchline))
+                    if setup != "?" and punchline:
+                        jokes.append((setup, punchline))
 
     except OSError:
         messagebox.showerror(
             "File error",
-            f"Could not find or open the jokes\n{file_path}",
+            f"Could not find or open the jokes\n{filepath}",
         )
 
     return jokes
@@ -40,19 +35,27 @@ def tell_joke():
     """Chooses a random joke and displays its setup."""
     global current_joke
 
-  if jokes:
+    if jokes:
         current_joke = random.choice(jokes)
         setup_label.config(text=current_joke[0])
         punchline_label.config(text="")
         punchline_button.config(state="normal")
+
 
 def show_punchline():
     """Display the punchline for the joke that is currently on screen."""
     if current_joke:
         punchline_label.config(text=current_joke[1])
 
+
 # Load the jokes and keep track of the joke currently being shown.
-jokes = load_jokes()
+jokes_file = (
+    Path(__file__).resolve().parent
+    / "Assessment 1 - Skills Portfolio"
+    / "A1 - Resources"
+    / "randomJokes.txt"
+)
+jokes = load_jokes(jokes_file)
 current_joke = None
 
 # Create the main application window.
