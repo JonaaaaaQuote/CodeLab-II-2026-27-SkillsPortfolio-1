@@ -90,3 +90,41 @@ punchline_label = tk.Label(
 )
 punchline_label.pack(pady=10)   
 
+# Connect each button to the function that handles its action.
+tell_button = tk.Button(
+    main_frame,
+    text="Alexa tell me a Joke",
+    command=tell_joke,
+)
+tell_button.pack(pady=5)
+
+punchline_button = tk.Button(
+    main_frame,
+    text="Show Punchline",
+    command=show_punchline,
+    state="disabled",
+)
+punchline_button.pack(pady=5)
+
+next_button = tk.Button(
+    main_frame,
+    text="Next Joke",
+    command=tell_joke,
+)
+next_button.pack(pady=5)
+
+quit_button = tk.Button(
+    main_frame,
+    text="Quit",
+    command=window.destroy,
+)
+quit_button.pack(pady=5)
+
+# Disable joke buttons if the file was empty or could not be loaded.
+if not jokes:
+    tell_button.config(state="disabled")
+    next_button.config(state="disabled")
+    setup_label.config(text="No jokes are available. Check the jokes file.")
+
+# Keep the window open and respond to button clicks.
+window.mainloop()
