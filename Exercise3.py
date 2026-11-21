@@ -377,7 +377,7 @@ class StudentManager:
         if exam is None:
             return None
 
-        # Build the comma-separated line in the same format used by the text file.
+        # Builds the comma-separated line in the same format used by the text file.
         return f"{code},{name},{coursework[0]},{coursework[1]},{coursework[2]},{exam}"
 
     def add_student(self):
