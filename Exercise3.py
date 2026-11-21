@@ -63,7 +63,7 @@ class StudentManager:
             return None
 
         try:
-            student = {
+            return {
                 "code": parts[0].strip(),
                 "name": parts[1].strip(),
                 "coursework": [
@@ -75,17 +75,6 @@ class StudentManager:
             }
         except ValueError:
             return None
-
-        if not 1000 <= int(student["code"]) <= 9999:
-            return None
-        if not student["name"] or "," in student["name"]:
-            return None
-        if any(mark < 0 or mark > 20 for mark in student["coursework"]):
-            return None
-        if student["exam"] < 0 or student["exam"] > 100:
-            return None
-
-        return student
 
     def create_widgets(self):
         """Create the menu buttons and the area used to display results."""
@@ -277,23 +266,21 @@ class StudentManager:
 
     def sort_ascending(self):
         """Show records ordered from the lowest total mark to the highest."""
-        valid_lines = [
-            line for line in self.students if self.parse_student(line) is not None
-        ]
         sorted_students = sorted(
-            valid_lines,
-            key=lambda line: self.total_mark(self.parse_student(line)),
+            self.students,
+            key=lambda line: self.total_mark(self.parse_student(line))
+            if self.parse_student(line) is not None
+            else -1,
         )
         self.show_records(sorted_students, "Records Sorted: Ascending")
 
     def sort_descending(self):
         """Show records ordered from the highest total mark to the lowest."""
-        valid_lines = [
-            line for line in self.students if self.parse_student(line) is not None
-        ]
         sorted_students = sorted(
-            valid_lines,
-            key=lambda line: self.total_mark(self.parse_student(line)),
+            self.students,
+            key=lambda line: self.total_mark(self.parse_student(line))
+            if self.parse_student(line) is not None
+            else -1,
             reverse=True,
         )
         self.show_records(sorted_students, "Records Sorted: Descending")
