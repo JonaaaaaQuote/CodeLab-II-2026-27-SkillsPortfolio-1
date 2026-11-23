@@ -32,9 +32,15 @@ def displayMenu(parent, choose_difficulty):
     """Build the difficulty menu and connect each button to its selection callback."""
     ttk.Label(
         parent,
+        text="READY?",
+        style="Eyebrow.TLabel",
+    ).pack(pady=(8, 2))
+
+    ttk.Label(
+        parent,
         text="Choose your difficulty",
         style="Header.TLabel",
-    ).pack(pady=(0, 16))
+    ).pack(pady=(0, 18))
 
     descriptions = {
         "Easy": "Single-digit numbers",
@@ -47,7 +53,8 @@ def displayMenu(parent, choose_difficulty):
             parent,
             text=f"{difficulty} ({description})",
             command=lambda d=difficulty: choose_difficulty(d),
-        ).pack(fill="x", pady=5)
+            style="Difficulty.TButton",
+        ).pack(fill="x", ipady=7, pady=5)
 
 
 def displayProblem(parent, question_text, answer_callback):
@@ -57,13 +64,14 @@ def displayProblem(parent, question_text, answer_callback):
         text=question_text,
         style="Question.TLabel",
     )
-    question_label.pack(pady=(24, 20))
+    question_label.pack(pady=(12, 8))
 
     instruction_label = ttk.Label(
         parent,
         text="Enter your answer below and press Enter to submit.",
+        style="Muted.TLabel",
     )
-    instruction_label.pack(pady=(16, 8))
+    instruction_label.pack(pady=(8, 8))
 
     answer_entry = ttk.Entry(
         parent,
@@ -79,10 +87,11 @@ def displayProblem(parent, question_text, answer_callback):
         parent,
         text="Submit answer",
         command=lambda: answer_callback(None),
+        style="Primary.TButton",
     )
-    submit_button.pack(pady=12)
+    submit_button.pack(pady=10, ipady=4)
 
-    feedback_label = ttk.Label(parent)
+    feedback_label = ttk.Label(parent, style="Feedback.TLabel")
     feedback_label.pack(pady=4)
 
     return question_label, answer_entry, feedback_label
@@ -115,7 +124,7 @@ def displayFinalScore(parent, score, replay_callback):
         parent,
         text="Quiz Complete!",
         style="Header.TLabel",
-    ).pack(pady=(0, 16))
+    ).pack(pady=(4, 16))
 
     ttk.Label(
         parent,
@@ -129,15 +138,27 @@ def displayFinalScore(parent, score, replay_callback):
         style="Score.TLabel",
     ).pack(pady=4)
 
-    ttk.Label(parent, text=message).pack(pady=(4, 16))
-    ttk.Label(parent, text="Would you like to play again?").pack(pady=(4, 8))
+    ttk.Label(parent, text=message, style="Muted.TLabel").pack(pady=(4, 16))
+    ttk.Label(parent, text="Would you like to play again?", style="Replay.TLabel").pack(pady=(4, 8))
 
     buttons = ttk.Frame(parent)
     buttons.pack()
-    ttk.Button(buttons, text="Yes", command=replay_callback).pack(side="left", padx=6)
-    ttk.Button(buttons, text="No", command=parent.winfo_toplevel().destroy).pack(
+    ttk.Button(
+        buttons,
+        text="Yes",
+        command=replay_callback,
+        style="Primary.TButton",
+    ).pack(side="left", padx=6, ipadx=8, ipady=4)
+    ttk.Button(
+        buttons,
+        text="No",
+        command=parent.winfo_toplevel().destroy,
+        style="Secondary.TButton",
+    ).pack(
         side="left",
         padx=6,
+        ipadx=8,
+        ipady=4,
     )
 
 
@@ -147,15 +168,30 @@ class MathsQuiz:
     def __init__(self, root):
         self.root = root
         self.root.title("Maths Quiz")
-        self.root.geometry("400x300")
+        self.root.geometry("520x440")
+        self.root.minsize(460, 380)
+        self.root.configure(bg="#F4F7FB")
 
         self.style = ttk.Style()
-        self.style.configure("Header.TLabel", font=("Segoe UI", 18, "bold"))
-        self.style.configure("Question.TLabel", font=("Segoe UI", 18, "bold"))
-        self.style.configure("Score.TLabel", font=("Segoe UI", 16, "bold"))
+        self.style.configure("TFrame", background="#F4F7FB")
+        self.style.configure("Header.TLabel", font=("Trebuchet MS", 22, "bold"), foreground="#183153", background="#F4F7FB")
+        self.style.configure("Eyebrow.TLabel", font=("Trebuchet MS", 9, "bold"), foreground="#66758A", background="#F4F7FB")
+        self.style.configure("Question.TLabel", font=("Trebuchet MS", 30, "bold"), foreground="#183153", background="#F4F7FB")
+        self.style.configure("Score.TLabel", font=("Trebuchet MS", 17, "bold"), foreground="#183153", background="#F4F7FB")
+        self.style.configure("Muted.TLabel", font=("Segoe UI", 10), foreground="#66758A", background="#F4F7FB")
+        self.style.configure("Feedback.TLabel", font=("Segoe UI", 11, "bold"), foreground="#5B3FC0", background="#F4F7FB")
+        self.style.configure("Replay.TLabel", font=("Segoe UI", 11, "bold"), foreground="#183153", background="#F4F7FB")
+        self.style.configure("TLabel", font=("Segoe UI", 11), foreground="#183153", background="#F4F7FB")
+        self.style.configure("TEntry", fieldbackground="#FFFFFF", foreground="#183153")
+        self.style.configure("Difficulty.TButton", font=("Segoe UI", 11, "bold"), foreground="#183153", background="#FFFFFF")
+        self.style.map("Difficulty.TButton", background=[("active", "#E8EDF7")])
+        self.style.configure("Primary.TButton", font=("Segoe UI", 11, "bold"), foreground="#FFFFFF", background="#5B3FC0")
+        self.style.map("Primary.TButton", background=[("active", "#4832A2")])
+        self.style.configure("Secondary.TButton", font=("Segoe UI", 11, "bold"), foreground="#183153", background="#DDE5F0")
+        self.style.map("Secondary.TButton", background=[("active", "#CBD7E8")])
 
-        self.main_frame = ttk.Frame(self.root, padding=28)
-        self.main_frame.pack(fill="both", expand=True)
+        self.main_frame = ttk.Frame(self.root, padding=32)
+        self.main_frame.pack(fill="both", expand=True, padx=24, pady=24)
 
         self.score = 0
         self.current_question = 0
