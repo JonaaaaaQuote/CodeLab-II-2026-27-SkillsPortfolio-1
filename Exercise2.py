@@ -63,18 +63,18 @@ window = tk.Tk()
 window.title("Alexa, Tell Me a Joke")
 window.geometry("560x460")
 window.minsize(500, 420)
-window.configure(bg="#17132A")
+window.configure(bg="#092D3D")
 
 # Add a frame to keep the labels and buttons neatly arranged.
-main_frame = tk.Frame(window, padx=28, pady=22, bg="#17132A")
+main_frame = tk.Frame(window, padx=28, pady=22, bg="#092D3D")
 main_frame.pack(fill="both", expand=True)
 
 title_label = tk.Label(
     main_frame,
     text="ALEXA'S\nLAUGH ROOM",
     font=("Georgia", 24, "bold"),
-    fg="#FFF4C7",
-    bg="#17132A",
+    fg="#EAFBFF",
+    bg="#092D3D",
     justify="center",
 )
 title_label.pack(pady=(2, 12))
@@ -84,7 +84,7 @@ setup_label = tk.Label(
     text="Click the button to get a joke.",
     font=("Trebuchet MS", 15),
     fg="#F7F3FF",
-    bg="#2A2342",
+    bg="#164C66",
     relief="flat",
     padx=18,
     pady=16,
@@ -97,14 +97,14 @@ punchline_label = tk.Label(
     main_frame,
     text="",
     font=("Georgia", 14, "italic"),
-    fg="#FFD166",
-    bg="#17132A",
+    fg="#66D9EF",
+    bg="#092D3D",
     wraplength=440,
     justify="center",
 )
 punchline_label.pack(pady=(8, 12), fill="x")
 
-button_row = tk.Frame(main_frame, bg="#17132A")
+button_row = tk.Frame(main_frame, bg="#092D3D")
 button_row.pack(pady=4)
 
 # Connect each button to the function that handles its action.
@@ -114,10 +114,10 @@ tell_button = tk.Button(
     command=tell_joke,
     width=15,
     font=("Trebuchet MS", 10, "bold"),
-    fg="#17132A",
-    bg="#FFD166",
-    activebackground="#FFE49A",
-    activeforeground="#17132A",
+    fg="#082D3B",
+    bg="#66D9EF",
+    activebackground="#9CE8F5",
+    activeforeground="#082D3B",
     relief="flat",
     cursor="hand2",
 )
@@ -131,15 +131,15 @@ punchline_button = tk.Button(
     width=15,
     font=("Trebuchet MS", 10, "bold"),
     fg="#FFFFFF",
-    bg="#7657D6",
-    disabledforeground="#AFA7C8",
-    activebackground="#8D73E2",
+    bg="#087EA4",
+    disabledforeground="#789CAB",
+    activebackground="#0796BC",
     relief="flat",
     cursor="hand2",
 )
 punchline_button.pack(side="left", padx=5, ipadx=4, ipady=7)
 
-bottom_row = tk.Frame(main_frame, bg="#17132A")
+bottom_row = tk.Frame(main_frame, bg="#092D3D")
 bottom_row.pack(pady=(10, 0))
 
 next_button = tk.Button(
@@ -148,9 +148,9 @@ next_button = tk.Button(
     command=tell_joke,
     width=12,
     font=("Trebuchet MS", 9, "bold"),
-    fg="#FFF4C7",
-    bg="#3B315A",
-    activebackground="#4D4370",
+    fg="#EAFBFF",
+    bg="#1F6682",
+    activebackground="#2A7D9A",
     relief="flat",
 )
 next_button.pack(side="left", padx=5, ipady=6)
@@ -161,9 +161,9 @@ quit_button = tk.Button(
     command=window.destroy,
     width=12,
     font=("Trebuchet MS", 9, "bold"),
-    fg="#FFF4C7",
-    bg="#3B315A",
-    activebackground="#4D4370",
+    fg="#EAFBFF",
+    bg="#1F6682",
+    activebackground="#2A7D9A",
     relief="flat",
 )
 quit_button.pack(side="left", padx=5, ipady=6)
