@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from tkinter import messagebox, simpledialog
+from tkinter import ttk
 
 
 # This is the text file for the studentmarks
@@ -15,7 +16,9 @@ class StudentManager:
     def __init__(self, window):
         self.window = window
         self.window.title("Student Manager")
-        self.window.geometry("850x570")
+        self.window.geometry("920x610")
+        self.window.minsize(760, 520)
+        self.window.configure(bg="#EDF7FA")
         self.students = self.load_students()
         self.create_widgets()
         self.view_all_students()
@@ -80,18 +83,22 @@ class StudentManager:
         """Create the menu buttons and the area used to display results."""
         title = tk.Label(
             self.window,
-            text="Student Manager",
-            font=("Arial", 20, "bold"),
+            text="STUDENT  /  RECORDS",
+            font=("Consolas", 20, "bold"),
+            fg="#EAFBFF",
+            bg="#123A55",
+            anchor="w",
+            padx=18,
         )
-        title.pack(pady=10)
+        title.pack(fill="x", ipady=12)
 
-        main_frame = tk.Frame(self.window)
-        main_frame.pack(fill="both", expand=True, padx=12, pady=8)
+        main_frame = tk.Frame(self.window, bg="#EDF7FA")
+        main_frame.pack(fill="both", expand=True, padx=14, pady=14)
 
-        menu_frame = tk.Frame(main_frame)
-        menu_frame.pack(side="left", fill="y", padx=(0, 12))
+        menu_frame = tk.Frame(main_frame, bg="#123A55", padx=12, pady=12)
+        menu_frame.pack(side="left", fill="y", padx=(0, 14))
 
-        output_frame = tk.Frame(main_frame)
+        output_frame = tk.Frame(main_frame, bg="#FFFFFF", highlightthickness=1, highlightbackground="#D7E1E8")
         output_frame.pack(side="right", fill="both", expand=True)
 
         # Each button runs the method for one student management option.
@@ -111,23 +118,112 @@ class StudentManager:
             tk.Button(
                 menu_frame,
                 text=label,
-                width=20,
+                width=21,
                 command=action,
-            ).pack(fill="x", pady=4)
+                font=("Segoe UI", 9, "bold"),
+                fg="#123A55",
+                bg="#D6EEF5",
+                activebackground="#A9DCE8",
+                activeforeground="#123A55",
+                relief="flat",
+                anchor="w",
+                padx=10,
+                cursor="hand2",
+            ).pack(fill="x", pady=3, ipady=5)
 
-        scrollbar = tk.Scrollbar(output_frame)
-        scrollbar.pack(side="right", fill="y")
-
-        self.output = tk.Text(
-            output_frame,
-            width=75,
-            height=25,
-            wrap="word",
-            yscrollcommand=scrollbar.set,
-            font=("Consolas", 10),
+        style = ttk.Style(self.window)
+        style.theme_use("clam")
+        style.configure(
+            "Student.Treeview",
+            background="#FFFFFF",
+            foreground="#123A55",
+            fieldbackground="#FFFFFF",
+            borderwidth=0,
+            rowheight=38,
+            font=("Segoe UI", 10),
         )
+        style.configure(
+            "Student.Treeview.Heading",
+            background="#D6EEF5",
+            foreground="#123A55",
+            relief="flat",
+            font=("Segoe UI", 9, "bold"),
+        )
+        style.map(
+            "Student.Treeview",
+            background=[("selected", "#A9DCE8")],
+            foreground=[("selected", "#123A55")],
+        )
+
+        header_frame = tk.Frame(output_frame, bg="#FFFFFF")
+        header_frame.pack(fill="x", padx=16, pady=(14, 8))
+
+        self.output_heading = tk.Label(
+            header_frame,
+            text="All Student Records",
+            font=("Segoe UI", 15, "bold"),
+            fg="#123A55",
+            bg="#FFFFFF",
+            anchor="w",
+        )
+        self.output_heading.pack(side="left", fill="x", expand=True)
+
+        self.output_summary = tk.Label(
+            header_frame,
+            text="",
+            font=("Segoe UI", 9),
+            fg="#5C7F91",
+            bg="#FFFFFF",
+            anchor="e",
+        )
+        self.output_summary.pack(side="right")
+
+        table_frame = tk.Frame(output_frame, bg="#FFFFFF")
+        table_frame.pack(fill="both", expand=True, padx=16, pady=(0, 16))
+
+        columns = (
+            "name",
+            "code",
+            "coursework",
+            "exam",
+            "total",
+            "percentage",
+            "grade",
+        )
+        self.output = ttk.Treeview(
+            table_frame,
+            columns=columns,
+            show="headings",
+            style="Student.Treeview",
+        )
+
+        headings = {
+            "name": ("STUDENT NAME", 180),
+            "code": ("NUMBER", 90),
+            "coursework": ("COURSEWORK", 105),
+            "exam": ("EXAM", 75),
+            "total": ("TOTAL", 75),
+            "percentage": ("PERCENTAGE", 105),
+            "grade": ("GRADE", 65),
+        }
+        for column, (heading, width) in headings.items():
+            self.output.heading(column, text=heading)
+            self.output.column(
+                column,
+                width=width,
+                minwidth=65,
+                anchor="center",
+            )
+        self.output.column("name", anchor="w")
+
+        scrollbar = ttk.Scrollbar(
+            table_frame,
+            orient="vertical",
+            command=self.output.yview,
+        )
+        self.output.configure(yscrollcommand=scrollbar.set)
         self.output.pack(side="left", fill="both", expand=True)
-        scrollbar.config(command=self.output.yview)
+        scrollbar.pack(side="right", fill="y")
 
     def coursework_total(self, student):
         """Add together a student's three coursework marks."""
@@ -172,10 +268,11 @@ class StudentManager:
         )
 
     def show_records(self, student_lines, heading):
-        """Display selected records and calculate their average percentage."""
-        self.output.delete("1.0", tk.END)
-        self.output.insert(tk.END, heading + "\n")
-        self.output.insert(tk.END, "=" * 42 + "\n\n")
+        """Display selected records in a table and calculate the average percentage."""
+        self.output_heading.config(text=heading)
+
+        for item in self.output.get_children():
+            self.output.delete(item)
 
         records = []
 
@@ -186,15 +283,29 @@ class StudentManager:
                 records.append(student)
 
         if not records:
-            self.output.insert(tk.END, "There are no valid student records to display.")
+            self.output_summary.config(text="0 records")
             return
 
         for student in records:
-            self.output.insert(tk.END, self.format_student(student) + "\n")
+            coursework = self.coursework_total(student)
+            self.output.insert(
+                "",
+                tk.END,
+                values=(
+                    student["name"],
+                    student["code"],
+                    f"{coursework} / 60",
+                    f"{student['exam']} / 100",
+                    f"{self.total_mark(student)} / 160",
+                    f"{self.percentage(student):.1f}%",
+                    self.grade(student),
+                ),
+            )
 
         average = sum(self.percentage(student) for student in records) / len(records)
-        self.output.insert(tk.END, f"Number of records shown: {len(records)}\n")
-        self.output.insert(tk.END, f"Average percentage: {average:.1f}%\n")
+        self.output_summary.config(
+            text=f"{len(records)} record{'s' if len(records) != 1 else ''}  |  Average {average:.1f}%"
+        )
 
     def view_all_students(self):
         """Show every student's results and the class average."""
