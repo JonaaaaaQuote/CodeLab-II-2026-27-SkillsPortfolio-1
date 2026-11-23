@@ -61,67 +61,112 @@ current_joke = None
 # Create the main application window.
 window = tk.Tk()
 window.title("Alexa, Tell Me a Joke")
-window.geometry("500x350")
-window.minsize(400, 300)
+window.geometry("560x460")
+window.minsize(500, 420)
+window.configure(bg="#17132A")
 
 # Add a frame to keep the labels and buttons neatly arranged.
-main_frame = tk.Frame(window, padx=20, pady=20)
+main_frame = tk.Frame(window, padx=28, pady=22, bg="#17132A")
 main_frame.pack(fill="both", expand=True)
 
 title_label = tk.Label(
     main_frame,
-    text="Alexa, tell me a joke!",
-    font=("Arial", 18, "bold"),
+    text="ALEXA'S\nLAUGH ROOM",
+    font=("Georgia", 24, "bold"),
+    fg="#FFF4C7",
+    bg="#17132A",
+    justify="center",
 )
-title_label.pack(pady=10)
+title_label.pack(pady=(2, 12))
 
 setup_label = tk.Label(
     main_frame,
     text="Click the button to get a joke.",
-    font=("Arial", 14),
+    font=("Trebuchet MS", 15),
+    fg="#F7F3FF",
+    bg="#2A2342",
+    relief="flat",
+    padx=18,
+    pady=16,
     wraplength=440,
     justify="center",
 )
-setup_label.pack(pady=15)
+setup_label.pack(fill="x", pady=(0, 8))
 
 punchline_label = tk.Label(
     main_frame,
     text="",
-    font=("Arial", 13, "italic"),
+    font=("Georgia", 14, "italic"),
+    fg="#FFD166",
+    bg="#17132A",
     wraplength=440,
     justify="center",
 )
-punchline_label.pack(pady=10)   
+punchline_label.pack(pady=(8, 12), fill="x")
+
+button_row = tk.Frame(main_frame, bg="#17132A")
+button_row.pack(pady=4)
 
 # Connect each button to the function that handles its action.
 tell_button = tk.Button(
-    main_frame,
-    text="Alexa tell me a Joke",
+    button_row,
+    text="TELL A JOKE",
     command=tell_joke,
+    width=15,
+    font=("Trebuchet MS", 10, "bold"),
+    fg="#17132A",
+    bg="#FFD166",
+    activebackground="#FFE49A",
+    activeforeground="#17132A",
+    relief="flat",
+    cursor="hand2",
 )
-tell_button.pack(pady=5)
+tell_button.pack(side="left", padx=5, ipadx=4, ipady=7)
 
 punchline_button = tk.Button(
-    main_frame,
-    text="Show Punchline",
+    button_row,
+    text="PUNCHLINE",
     command=show_punchline,
     state="disabled",
+    width=15,
+    font=("Trebuchet MS", 10, "bold"),
+    fg="#FFFFFF",
+    bg="#7657D6",
+    disabledforeground="#AFA7C8",
+    activebackground="#8D73E2",
+    relief="flat",
+    cursor="hand2",
 )
-punchline_button.pack(pady=5)
+punchline_button.pack(side="left", padx=5, ipadx=4, ipady=7)
+
+bottom_row = tk.Frame(main_frame, bg="#17132A")
+bottom_row.pack(pady=(10, 0))
 
 next_button = tk.Button(
-    main_frame,
-    text="Next Joke",
+    bottom_row,
+    text="NEXT",
     command=tell_joke,
+    width=12,
+    font=("Trebuchet MS", 9, "bold"),
+    fg="#FFF4C7",
+    bg="#3B315A",
+    activebackground="#4D4370",
+    relief="flat",
 )
-next_button.pack(pady=5)
+next_button.pack(side="left", padx=5, ipady=6)
 
 quit_button = tk.Button(
-    main_frame,
-    text="Quit",
+    bottom_row,
+    text="EXIT",
     command=window.destroy,
+    width=12,
+    font=("Trebuchet MS", 9, "bold"),
+    fg="#FFF4C7",
+    bg="#3B315A",
+    activebackground="#4D4370",
+    relief="flat",
 )
-quit_button.pack(pady=5)
+quit_button.pack(side="left", padx=5, ipady=6)
 
 # Disable joke buttons if the file was empty or could not be loaded.
 if not jokes:
