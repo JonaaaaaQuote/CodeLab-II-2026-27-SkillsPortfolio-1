@@ -3,10 +3,11 @@
 import tkinter as tk
 from tkinter import messagebox, simpledialog
 from tkinter import ttk
+from pathlib import Path
 
 
 # This is the text file for the studentmarks
-FILE_NAME = "studentMarks.txt" 
+FILE_NAME = Path(__file__).resolve().parent / "studentMarks.txt"
 MAXIMUM_MARK = 160
 
 
